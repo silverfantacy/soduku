@@ -3,6 +3,8 @@ import { Input } from '@material-ui/core';
 
 import './assets/sass/App.scss';
 
+const basic_data = [1,2,3,4,5,6,7,8,9]
+
 function App() {
   const [soduku, setSuduku] = useState([
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -19,10 +21,13 @@ function App() {
 
   useEffect(() => {
     // 數獨Data發生改變時觸發
+    
     return () => {
 
     }
-  }, [soduku])
+  }, [])
+
+  create()
 
   // 生成9個區域
   function renderLi() {
@@ -198,6 +203,62 @@ function App() {
     if (checkSame.length > 1 || checkRow.length > 1 || checkCol.length > 1) {
       return true
     }
+  }
+
+  // 創建數獨
+  function create() {
+    let new_arr = JSON.parse(JSON.stringify(soduku))
+    // console.log('new_arr', new_arr)
+    
+    // let randomNub = 1 + (Math.floor(Math.random() * 10));
+    // console.log('randomNub', randomNub)
+    new_arr.forEach((i,iIndx)=>{
+      // i.forEach((j,jIndx)=>{
+        
+        let use_data = JSON.parse(JSON.stringify(basic_data))
+        let a = use_data.length
+        let temp
+        let new_suduku = []
+        while ( a > 0) {
+          let tmp_data = use_data
+          // console.log('while tmp_data', tmp_data)
+          // console.log('while a',a)
+          let randomNub = (Math.floor(Math.random() * tmp_data.length)+1);
+          // console.log('while randomNub', randomNub)
+          temp = tmp_data[randomNub-1]
+          // console.log('while temp', temp)
+          // console.log('indeOf =>', tmp_data.indexOf(temp))
+          tmp_data = JSON.parse(JSON.stringify(tmp_data.splice(tmp_data.indexOf(temp),1)))
+          // console.log('use_data end =>', tmp_data)
+          new_suduku.push(temp)
+          a--
+        }
+      // console.log('new_suduku',new_suduku)
+      new_arr[iIndx] = new_suduku
+    })
+    console.log('new_arr end =>', new_arr)
+    // setSuduku(new_arr)
+  }
+
+  // getRandomArrayElements(basic_data, 1)
+
+  function getRandomArrayElements(arr, count) {
+    var shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
+    console.log('shuffled', shuffled, 'i', i, 'min', min)
+    while (i-- > min) {
+      index = Math.floor((i + 1) * Math.random());
+      temp = shuffled[index];
+      shuffled[index] = shuffled[i];
+      shuffled[i] = temp;
+    }
+
+    console.log('shuffled end', shuffled.slice(min), 'min', min)
+    return shuffled.slice(min);
+  }
+
+  function randomNub() {
+    //產生隨機數 0到count不包含count的隨機數
+    return 1 + (Math.floor(Math.random() * 9));
   }
 
   return (
