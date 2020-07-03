@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/static/css/main.0bcc5498.chunk.css",
-    "main.js": "/static/js/main.cdac8b50.chunk.js",
-    "main.js.map": "/static/js/main.cdac8b50.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.2c08db58.js",
-    "runtime-main.js.map": "/static/js/runtime-main.2c08db58.js.map",
-    "static/js/2.2a837404.chunk.js": "/static/js/2.2a837404.chunk.js",
-    "static/js/2.2a837404.chunk.js.map": "/static/js/2.2a837404.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.6ea4c539372cf5f4c82241d15435d9ae.js": "/precache-manifest.6ea4c539372cf5f4c82241d15435d9ae.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.0bcc5498.chunk.css.map": "/static/css/main.0bcc5498.chunk.css.map",
-    "static/js/2.2a837404.chunk.js.LICENSE.txt": "/static/js/2.2a837404.chunk.js.LICENSE.txt"
+    "main.css": "/silverfantacy/soduku.git/static/css/main.0bcc5498.chunk.css",
+    "main.js": "/silverfantacy/soduku.git/static/js/main.49ed82f3.chunk.js",
+    "main.js.map": "/silverfantacy/soduku.git/static/js/main.49ed82f3.chunk.js.map",
+    "runtime-main.js": "/silverfantacy/soduku.git/static/js/runtime-main.c3f233e5.js",
+    "runtime-main.js.map": "/silverfantacy/soduku.git/static/js/runtime-main.c3f233e5.js.map",
+    "static/js/2.2a837404.chunk.js": "/silverfantacy/soduku.git/static/js/2.2a837404.chunk.js",
+    "static/js/2.2a837404.chunk.js.map": "/silverfantacy/soduku.git/static/js/2.2a837404.chunk.js.map",
+    "index.html": "/silverfantacy/soduku.git/index.html",
+    "precache-manifest.a208db8a8c9ffdbffae400f4c2920724.js": "/silverfantacy/soduku.git/precache-manifest.a208db8a8c9ffdbffae400f4c2920724.js",
+    "service-worker.js": "/silverfantacy/soduku.git/service-worker.js",
+    "static/css/main.0bcc5498.chunk.css.map": "/silverfantacy/soduku.git/static/css/main.0bcc5498.chunk.css.map",
+    "static/js/2.2a837404.chunk.js.LICENSE.txt": "/silverfantacy/soduku.git/static/js/2.2a837404.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.2c08db58.js",
+    "static/js/runtime-main.c3f233e5.js",
     "static/js/2.2a837404.chunk.js",
     "static/css/main.0bcc5498.chunk.css",
-    "static/js/main.cdac8b50.chunk.js"
+    "static/js/main.49ed82f3.chunk.js"
   ]
 }
