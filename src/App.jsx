@@ -1,33 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { Input } from '@material-ui/core';
-
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import './assets/sass/App.scss';
 
-const basic_data = [1,2,3,4,5,6,7,8,9]
+const blank_arr = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0]
+]
+const basic_data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
+
 
 function App() {
-  const [soduku, setSuduku] = useState([
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0]
-  ])
+  const [soduku, setSuduku] = useState(blank_arr)
   // console.log('soduku', soduku)
 
   useEffect(() => {
     // 數獨Data發生改變時觸發
-    
+    create()
     return () => {
 
     }
   }, [])
-
-  create()
 
   // 生成9個區域
   function renderLi() {
@@ -39,7 +48,7 @@ function App() {
   // 生成區域內的9個格子
   function renderInput(array, area) {
     return array.map((e, index) => {
-      return <Input key={`${area}-${index}`} color="secondary" type="number" onChange={setNum} inputProps={{ min: 1, max: 9, maxLength: 1, 'data-area': area, 'data-index': index }} value={e || ''} error={checkNum(array, area, e, index)} />
+      return <Input key={`${area}-${index}`} color="secondary" type="number" onChange={setNum} inputProps={{ min: 1, max: 9, maxLength: 1, 'data-area': area, 'data-index': index }} value={e || ''} error={checkNumError(array, area, e, index)} />
     })
   }
 
@@ -62,13 +71,12 @@ function App() {
     new_suduku[area][index] = Number(event.target.value)
     setSuduku(new_suduku)
     // console.log('最後的soduku',soduku)
-    // checkNum(area)
   }
 
   // 判斷數字是否在9宮格、行、列內，是否重複
-  function checkNum(array, area, e, index) {
+  function checkNumError(array, area, e, index, new_arr) {
     // array=>當下array，area=>當下區域位置，e=>當下的數字， index=>當下的位置
-
+    // console.log('array, area, e, index', array, area, e, index)
     // 沒有填的排除
     if (e === 0) {
       return false
@@ -88,49 +96,49 @@ function App() {
       case 0:
       case 1:
       case 2:
-        this_row_area = [0,1,2]
+        this_row_area = [0, 1, 2]
         break;
       case 3:
       case 4:
       case 5:
-        this_row_area = [3,4,5]
+        this_row_area = [3, 4, 5]
         break;
       case 6:
       case 7:
       case 8:
-        this_row_area = [6,7,8]
+        this_row_area = [6, 7, 8]
         break;
       default:
         break;
     }
-    
+
     let this_row;
     switch (index) {
       case 0:
       case 1:
       case 2:
-        this_row = [0,1,2]
+        this_row = [0, 1, 2]
         break;
       case 3:
       case 4:
       case 5:
-        this_row = [3,4,5]
+        this_row = [3, 4, 5]
         break;
       case 6:
       case 7:
       case 8:
-        this_row = [6,7,8]
+        this_row = [6, 7, 8]
         break;
       default:
         break;
     }
     // console.log('this_row_area', this_row_area)
     // console.log('this_row', this_row)
-    let new_suduku = JSON.parse(JSON.stringify(soduku))
+    let new_suduku = new_arr || JSON.parse(JSON.stringify(soduku))
     let new_row = []
     // console.log('new_suduku', new_suduku)
     this_row_area.forEach(i => {
-      this_row.forEach(j=>{
+      this_row.forEach(j => {
         new_row.push(new_suduku[i][j])
       })
     });
@@ -138,7 +146,7 @@ function App() {
     let checkRow = new_row.filter((item, idx) => {
       return item === e
     })
-    console.log('checkRow', checkRow)
+
     // 列判斷
 
     // 行判斷
@@ -202,64 +210,64 @@ function App() {
     // 如果有任何一個重複就標記error
     if (checkSame.length > 1 || checkRow.length > 1 || checkCol.length > 1) {
       return true
+    } else {
+      return false
     }
   }
 
   // 創建數獨
-  function create() {
+  async function create() {
     let new_arr = JSON.parse(JSON.stringify(soduku))
     // console.log('new_arr', new_arr)
-    
+
     // let randomNub = 1 + (Math.floor(Math.random() * 10));
     // console.log('randomNub', randomNub)
-    new_arr.forEach((i,iIndx)=>{
+    await new_arr.forEach((i, iIndex) => {
       // i.forEach((j,jIndx)=>{
-        
-        let use_data = JSON.parse(JSON.stringify(basic_data))
-        let a = use_data.length
-        let temp
-        let new_suduku = []
-        while ( a > 0) {
-          let tmp_data = use_data
-          // console.log('while tmp_data', tmp_data)
-          // console.log('while a',a)
-          let randomNub = (Math.floor(Math.random() * tmp_data.length)+1);
-          // console.log('while randomNub', randomNub)
-          temp = tmp_data[randomNub-1]
-          // console.log('while temp', temp)
-          // console.log('indeOf =>', tmp_data.indexOf(temp))
-          tmp_data = JSON.parse(JSON.stringify(tmp_data.splice(tmp_data.indexOf(temp),1)))
-          // console.log('use_data end =>', tmp_data)
-          new_suduku.push(temp)
-          a--
-        }
+
+      let use_data = JSON.parse(JSON.stringify(basic_data))
+      let a = use_data.length
+      let temp
+      let new_suduku = []
+      while (a > 0) {
+        let tmp_data = use_data
+        // console.log('while tmp_data', tmp_data)
+        // console.log('while a',a)
+        let randomNub = (Math.floor(Math.random() * tmp_data.length) + 1);
+        // console.log('while randomNub', randomNub)
+        temp = tmp_data[randomNub - 1]
+        // console.log('while temp', temp)
+        // console.log('indeOf =>', tmp_data.indexOf(temp))
+        tmp_data = JSON.parse(JSON.stringify(tmp_data.splice(tmp_data.indexOf(temp), 1)))
+        // console.log('use_data end =>', tmp_data)
+        new_suduku.push(temp)
+        a--
+      }
       // console.log('new_suduku',new_suduku)
-      new_arr[iIndx] = new_suduku
+      new_arr[iIndex] = new_suduku
     })
     console.log('new_arr end =>', new_arr)
-    // setSuduku(new_arr)
+    await new_arr.forEach((i, area) => {
+      // console.log('i, area', i, area)
+      i.forEach((j, index) => {
+        // console.log('j, index', j, index)
+        if (checkNumError(i, area, j, index, new_arr)) {
+          console.log('驗證錯誤')
+          // 重新產生陣列
+          // create()
+        } else {
+          console.log('通過')
+        }
+      })
+    })
+    setSuduku(new_arr)
   }
 
-  // getRandomArrayElements(basic_data, 1)
-
-  function getRandomArrayElements(arr, count) {
-    var shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
-    console.log('shuffled', shuffled, 'i', i, 'min', min)
-    while (i-- > min) {
-      index = Math.floor((i + 1) * Math.random());
-      temp = shuffled[index];
-      shuffled[index] = shuffled[i];
-      shuffled[i] = temp;
-    }
-
-    console.log('shuffled end', shuffled.slice(min), 'min', min)
-    return shuffled.slice(min);
+  function reset() {
+    setSuduku(blank_arr)
   }
 
-  function randomNub() {
-    //產生隨機數 0到count不包含count的隨機數
-    return 1 + (Math.floor(Math.random() * 9));
-  }
+  const classes = useStyles();
 
   return (
     <div className="App">
@@ -267,6 +275,15 @@ function App() {
         <ul className="sd">
           {renderLi()}
         </ul>
+
+        <div className={classes.root}>
+          <Button variant="contained" size="small" onClick={() => {create()}}>
+            重新生產
+          </Button>
+          <Button variant="contained" color="secondary" size="small" onClick={() => {reset()}}>
+            清空
+          </Button>
+        </div>
       </main>
     </div>
   );
