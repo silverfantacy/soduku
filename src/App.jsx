@@ -276,21 +276,24 @@ function App() {
         console.log('重填=>', iIndex)
         // 重填整個區塊
         // calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        // loopNum(calcArr[iIndex], iIndex, calcArr)
-        break
+        // calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        // // loopNum(calcArr[iIndex], iIndex, calcArr)
+        // loopArr(calcArr, iIndex-1)
+        // break
         // 如果這個array完全沒數字可填則，loopArr上一個
         // if (j === 0) {
-          // let reset = iIndex - 1
-          // if (reset === 4 ) {
-          //   // 排除固定區域
-          //   reset = iIndex - 2
-          // }
+          let reset = iIndex - 1
+          if (reset === 4 ) {
+            // 排除固定區域
+            reset = iIndex - 2
+          }
+          calcArr[reset] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+          calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+          loopArr(calcArr, reset)
+        break
           // calcArr[reset] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
           // calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-          // loopArr(calcArr, reset)
-          // // calcArr[reset] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-          // // calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-          // // loopNum(i, reset, calcArr)
+          // loopNum(i, reset, calcArr)
           // break
         // } else {
         //   calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
