@@ -225,103 +225,117 @@ function App() {
     new_arr[0] = randomArr()
     new_arr[4] = randomArr()
     new_arr[8] = randomArr()
-    console.log('new_arr 1st =>', new_arr)
+    // console.log('new_arr 1st =>', new_arr)
     setSuduku(new_arr)
     await new_arr.forEach((i, iIndex) => {
-      if (iIndex === 0 || iIndex === 3 || iIndex ===6) {
+      if (iIndex === 0 || iIndex === 4 || iIndex ===8) {
         return
       }
       // 大規則
-
-      // 列判斷
       let used_data = []
-      
-      i.forEach((j,jIndex) => {
-        let this_row_area;
-        switch (iIndex) {
-          case 0:
-          case 1:
-          case 2:
-            this_row_area = [0, 1, 2]
-            break;
-          case 3:
-          case 4:
-          case 5:
-            this_row_area = [3, 4, 5]
-            break;
-          case 6:
-          case 7:
-          case 8:
-            this_row_area = [6, 7, 8]
-            break;
-          default:
-            break;
+      let rowGroup_arr = rowGroup(i, iIndex, new_arr)
+      let colGroup_arr = colGroup(i, iIndex, new_arr)
+      // console.log('目前列row有的數字',rowGroup(i, iIndex, new_arr))
+      // console.log('目前行col有的數字',colGroup(i, iIndex, new_arr))
+
+      // 第一格
+      let calcArr = [...new_arr]
+      console.log('calcArr', calcArr)
+      for(let j=0; j<9;j++){
+        let used_num = [...(new Set([...rowGroup_arr[j], ...colGroup_arr[j],...i]))]
+        // console.log(`${iIndex}區域${j}位置已使用的數字集合`,used_num);
+        let use_num = JSON.parse(JSON.stringify(basic_data)).filter(e => {
+            return used_num.indexOf(e) === -1
+        })
+        console.log(`${iIndex}區域${j}位置可使用的數字集合`, use_num);
+        if (use_num.length === 0) {
+          if(j===0) {
+            j=0
+          }
+        }
+        let randomNub = (Math.floor(Math.random() * (use_num.length)));
+        console.log('randomNub', randomNub, use_num[randomNub])
+        if (!use_num[randomNub]) {
+          j = 0
+          return 
+        }
+        console.log('calcArrIN', calcArr)
+        if (!checkNumError(i, iIndex, use_num[randomNub], j, calcArr)) {
+          calcArr[iIndex][j] = use_num[randomNub]
+          console.log('calcArr[iIndex][j]', calcArr[iIndex][j])
+        } else {
+          j = 0
         }
 
-        let this_row;
-        switch (jIndex) {
-          case 0:
-          case 1:
-          case 2:
-            this_row = [0, 1, 2]
-            break;
-          case 3:
-          case 4:
-          case 5:
-            this_row = [3, 4, 5]
-            break;
-          case 6:
-          case 7:
-          case 8:
-            this_row = [6, 7, 8]
-            break;
-          default:
-            break;
-        }
-        // console.log('this_row_area', this_row_area)
-        // console.log('this_row', this_row)
-        let new_suduku = new_arr || JSON.parse(JSON.stringify(soduku))
-        let new_row = []
-        // console.log('new_suduku', new_suduku)
-        this_row_area.forEach(x => {
-          this_row.forEach(y => {
-            new_row.push(new_suduku[x][y])
-          })
-        });
-        used_data = new_row
-
-        console.log('目前有的數字',new_row);
-      })
-
-      let use_data = JSON.parse(JSON.stringify(basic_data)).filter(e=> {
-        if(e !== 0) {
-          return used_data.indexOf(e) === -1
-        }
-      })
-
-      // let use_data = JSON.parse(JSON.stringify(basic_data))
-      let a = use_data.length
-      console.log('use_data', use_data,a);
-      let temp
-      let new_suduku = []
-
-      while (a > 0) {
-        let tmp_data = use_data
-        // console.log('while tmp_data', tmp_data)
-        // console.log('while a',a)
-        let randomNub = (Math.floor(Math.random() * tmp_data.length) + 1);
-        // console.log('while randomNub', randomNub)
-        temp = tmp_data[randomNub - 1]
-        // console.log('while temp', temp)
-        // console.log('indeOf =>', tmp_data.indexOf(temp))
-        tmp_data = JSON.parse(JSON.stringify(tmp_data.splice(tmp_data.indexOf(temp), 1)))
-        // console.log('use_data end =>', tmp_data)
-
-        let index = 9 - a
-        new_suduku[index] = (temp)
-        a--
       }
-      console.log('new_suduku', new_suduku);
+
+      new_arr = calcArr
+      setSuduku(new_arr)
+
+      
+
+        // for (let x = 0; x < use_num.length; x++) {
+        //   // new_arr[iIndex][j] = use_num[x]0.
+        //   // console.log('new_arr[i][j]', new_arr[iIndex][j])
+        //   // console.log(`判斷i=>${i}, iIndex=>${iIndex}, use_num[x]=>${use_num[x]}, j${j}, new_arr${new_arr}`)
+        //   // console.log('判斷', checkNumError(i, iIndex, use_num[x], j, new_arr))
+        //   if (!checkNumError(i, iIndex, use_num[x], j, new_arr)){
+        //     new_arr[iIndex][j] = use_num[x]
+        //     break;
+        //   }
+        // }
+
+
+
+
+          // console.log('object13')
+          // let i
+          // try {
+          //   use_num.forEach(e => {
+          //     i++
+          //     if (i < 3) {
+          //       throw new Error('超過次數')
+          //     }
+          //     if (checkNumError(i, iIndex, e, j, new_arr)) {
+          //       return
+          //     } else {
+          //       // 通過
+          //       new_arr[i][j] = e
+          //       throw new Error('可以停了')
+          //     }
+
+          //   })
+          // } catch(e) {
+          //   console.log('error', e.message)
+          //   next = true
+          // }
+
+        // }
+        // use_num
+
+      // // let use_data = JSON.parse(JSON.stringify(basic_data))
+      // let a = use_data.length
+      // console.log('use_data', use_data,a);
+      // let temp
+      // let new_suduku = []
+
+      // while (a > 0) {
+      //   let tmp_data = use_data
+      //   // console.log('while tmp_data', tmp_data)
+      //   // console.log('while a',a)
+      //   let randomNub = (Math.floor(Math.random() * tmp_data.length) + 1);
+      //   // console.log('while randomNub', randomNub)
+      //   temp = tmp_data[randomNub - 1]
+      //   // console.log('while temp', temp)
+      //   // console.log('indeOf =>', tmp_data.indexOf(temp))
+      //   tmp_data = JSON.parse(JSON.stringify(tmp_data.splice(tmp_data.indexOf(temp), 1)))
+      //   // console.log('use_data end =>', tmp_data)
+
+      //   let index = 9 - a
+      //   new_suduku[index] = (temp)
+      //   a--
+      // }
+      // console.log('new_suduku', new_suduku);
 
       
       // 大規則
@@ -361,6 +375,127 @@ function App() {
 
   function reset() {
     setSuduku(blank_arr)
+  }
+
+
+  function rowGroup(i, iIndex, new_arr) {
+    let rowGroup = []
+    i.forEach((j, jIndex) => {
+      let this_row_area;
+      switch (iIndex) {
+        case 0:
+        case 1:
+        case 2:
+          this_row_area = [0, 1, 2]
+          break;
+        case 3:
+        case 4:
+        case 5:
+          this_row_area = [3, 4, 5]
+          break;
+        case 6:
+        case 7:
+        case 8:
+          this_row_area = [6, 7, 8]
+          break;
+        default:
+          break;
+      }
+
+      let this_row;
+      switch (jIndex) {
+        case 0:
+        case 1:
+        case 2:
+          this_row = [0, 1, 2]
+          break;
+        case 3:
+        case 4:
+        case 5:
+          this_row = [3, 4, 5]
+          break;
+        case 6:
+        case 7:
+        case 8:
+          this_row = [6, 7, 8]
+          break;
+        default:
+          break;
+      }
+      let new_suduku = new_arr || JSON.parse(JSON.stringify(soduku))
+      let new_row = []
+      // console.log('new_suduku', new_suduku)
+      this_row_area.forEach(x => {
+        this_row.forEach(y => {
+          new_row.push(new_suduku[x][y])
+        })
+      });
+      // console.log('this_row_area', this_row_area);
+      // console.log('new_row', new_row);
+
+      rowGroup.push(new_row)
+    })
+    return rowGroup
+  }
+
+  function colGroup(i, iIndex, new_arr) {
+    let colGroup = []
+    i.forEach((j, jIndex) => {
+      let this_col_area;
+      switch (iIndex) {
+        case 0:
+        case 3:
+        case 6:
+          this_col_area = [0, 3, 6]
+          break;
+        case 1:
+        case 4:
+        case 7:
+          this_col_area = [1, 4, 7]
+          break;
+        case 2:
+        case 5:
+        case 8:
+          this_col_area = [2, 5, 8]
+          break;
+        default:
+          break;
+      }
+
+      let this_col;
+      switch (jIndex) {
+        case 0:
+        case 3:
+        case 6:
+          this_col = [0, 3, 6]
+          break;
+        case 1:
+        case 4:
+        case 7:
+          this_col = [1, 4, 7]
+          break;
+        case 2:
+        case 5:
+        case 8:
+          this_col = [2, 5, 8]
+          break;
+        default:
+          break;
+      }
+      let new_suduku = new_arr || JSON.parse(JSON.stringify(soduku))
+      let new_col = []
+      // console.log('new_suduku', new_suduku)
+      this_col_area.forEach(x => {
+        this_col.forEach(y => {
+          new_col.push(new_suduku[x][y])
+        })
+      });
+      // console.log('this_col_area', this_col_area);
+      // console.log('new_col', new_col);
+      colGroup.push(new_col)
+      
+    })
+    return colGroup
   }
 
   const classes = useStyles();
