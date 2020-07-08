@@ -256,66 +256,71 @@ function App() {
 
     // 循環填入9宮格
     for (let j = 0; j < 9; j++) {
+      console.log('calcArr[iIndex][j]', calcArr[iIndex][j])
+      if (calcArr[iIndex][j] === 0) {
+        let used_num = [...(new Set([...rowGroup_arr[j], ...colGroup_arr[j], ...i]))]
+        // console.log(`${iIndex}區域${j}位置已使用的數字集合`,used_num);
 
-      let used_num = [...(new Set([...rowGroup_arr[j], ...colGroup_arr[j], ...i]))]
-      // console.log(`${iIndex}區域${j}位置已使用的數字集合`,used_num);
 
-      
-      let use_num = JSON.parse(JSON.stringify(basic_data)).filter(e => {
-        return used_num.indexOf(e) === -1
-      })
-      console.log(`${iIndex}-${j}位置可使用的數字集合`, use_num);
+        let use_num = JSON.parse(JSON.stringify(basic_data)).filter(e => {
+          return used_num.indexOf(e) === -1
+        })
+        console.log(`${iIndex}-${j}位置可使用的數字集合`, use_num);
 
-      // 如果可以用的數字為0，則3組數字重填
-      if (use_num.length === 0) {
-        // if (j % 3 === 0) {
-        //   j = j
-        // } else if (j % 3 === 1) {
-        //   j = Math.floor(j / 3) - 1
-        // }
-        console.log('重填=>', iIndex)
-        // 重填整個區塊
-        // calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        // calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        // // loopNum(calcArr[iIndex], iIndex, calcArr)
-        // loopArr(calcArr, iIndex-1)
-        // break
-        // 如果這個array完全沒數字可填則，loopArr上一個
-        // if (j === 0) {
+        // 如果可以用的數字為0，則3組數字重填
+        if (use_num.length === 0) {
+          // if (j % 3 === 0) {
+          //   j = j
+          // } else if (j % 3 === 1) {
+          //   j = Math.floor(j / 3) - 1
+          // }
+          console.log('重填=>', iIndex)
+          // 重填整個區塊
+          // calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+          // calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+          // // loopNum(calcArr[iIndex], iIndex, calcArr)
+          // loopArr(calcArr, iIndex-1)
+          // break
+          // 如果這個array完全沒數字可填則，loopArr上一個
+          // if (j === 0) {
           let reset = iIndex - 1
-          if (reset === 4 ) {
+          if (reset === 4) {
             // 排除固定區域
             reset = iIndex - 2
+          } else if (reset === 0) {
+            reset = 1
           }
           calcArr[reset] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
           calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
           loopArr(calcArr, reset)
-        break
+          break
           // calcArr[reset] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
           // calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
           // loopNum(i, reset, calcArr)
           // break
-        // } else {
-        //   calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        //   loopNum(i, iIndex, calcArr)
-        //   break
-        // }
-      }
+          // } else {
+          //   calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+          //   loopNum(i, iIndex, calcArr)
+          //   break
+          // }
+        }
 
-      // 隨機取得一個數字
-      let randomNub = (Math.floor(Math.random() * (use_num.length)));
-      console.log('randomNub', randomNub, use_num[randomNub])
+        // 隨機取得一個數字
+        let randomNub = (Math.floor(Math.random() * (use_num.length)));
+        console.log('randomNub', randomNub, use_num[randomNub])
 
-      // 通過驗證則寫入 calcArr
-      if (!checkNumError(i, iIndex, use_num[randomNub], j, calcArr)) {
         // 通過驗證則寫入 calcArr
-        calcArr[iIndex][j] = use_num[randomNub]
-        console.log('填入', calcArr[iIndex][j])
-      } else {
-        // 驗證失敗 重新loopNum
-        loopNum(i, iIndex, new_arr)
-        break
+        if (!checkNumError(i, iIndex, use_num[randomNub], j, calcArr)) {
+          // 通過驗證則寫入 calcArr
+          calcArr[iIndex][j] = use_num[randomNub]
+          console.log('填入', calcArr[iIndex][j])
+        } else {
+          // 驗證失敗 重新loopNum
+          loopNum(i, iIndex, new_arr)
+          break
+        }
       }
+      
     }
     console.log('最後結果calcArr', calcArr);
 
