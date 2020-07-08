@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+var breaked = false;
+var loopTimesArr = 0;
+var loopTimesN = 0;
 
 function App() {
   const [soduku, setSuduku] = useState(blank_arr)
@@ -210,6 +213,7 @@ function App() {
   function create() {
     
     clean()
+    setisLoading(true)
     let new_arr = JSON.parse(JSON.stringify(blank_arr))
 
     new_arr[0] = randomArr()
@@ -217,11 +221,12 @@ function App() {
     new_arr[8] = randomArr()
     setSuduku(new_arr)
     loopArr(new_arr, 1)
+    setisLoading(false)
   }
 
-  var breaked = false;
-
   function loopArr(new_arr, this_area) {
+    loopTimesArr++
+    console.log('重複了loopArr次=>', loopTimesArr)
     console.log('loopArr開始的區域=>', this_area)
     for (let iIndex = this_area; iIndex < new_arr.length; iIndex++) {
       
@@ -248,6 +253,8 @@ function App() {
   }
 
   function loopNum(i, iIndex, new_arr) {
+    loopTimesN++
+    console.log('重複了loopTimesN次=>', loopTimesN)
     // console.log('loopNum')
     let rowGroup_arr = rowGroup(i, iIndex, new_arr)
     let colGroup_arr = colGroup(i, iIndex, new_arr)
@@ -306,51 +313,6 @@ function App() {
         // console.log('最後結果calcArr', calcArr);
       }
     }
-    // for (let j = 0; j < 9; j++) {
-    //   if (calcArr[iIndex][j] === 0) {
-    //     let used_num = [...(new Set([...rowGroup_arr[j], ...colGroup_arr[j], ...i]))]
-    //     // console.log(`${iIndex}區域${j}位置已使用的數字集合`,used_num);
-
-    //     let use_num = JSON.parse(JSON.stringify(basic_data)).filter(e => {
-    //       return used_num.indexOf(e) === -1
-    //     })
-    //     console.log(`${iIndex}-${j}位置可使用的數字集合`, use_num);
-
-    //     // 如果可以用的數字為0，則整組數字重填
-    //     if (use_num.length === 0) {
-    //       console.log('重填=>', iIndex)
-    //       // 重填整個區塊
-    //       // 如果這個array完全沒數字可填則，loopArr上一個
-    //       let reset = iIndex - 1
-    //       if (reset === 4) {
-    //         // 排除固定區域
-    //         reset = iIndex - 2
-    //       } else if (reset === 0) {
-    //         reset = 1
-    //       }
-    //       calcArr[reset] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    //       calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    //       // loopArr(calcArr, reset)
-    //       break
-    //     }
-
-    //     // 隨機取得一個數字
-    //     let randomNub = (Math.floor(Math.random() * (use_num.length)));
-    //     // console.log('randomNub', randomNub, use_num[randomNub])
-
-    //     // 通過驗證則寫入 calcArr
-    //     if (!checkNumError(i, iIndex, use_num[randomNub], j, calcArr)) {
-    //       // 通過驗證則寫入 calcArr
-    //       calcArr[iIndex][j] = use_num[randomNub]
-    //       console.log('填入', calcArr[iIndex][j])
-    //     } else {
-    //       // 驗證失敗 重新loopNum
-    //       loopNum(i, iIndex, new_arr)
-    //       break
-    //     }
-    //     console.log('最後結果calcArr', calcArr);
-    //   }
-    // }
 
     return calcArr
   }
