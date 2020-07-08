@@ -43,20 +43,6 @@ function App() {
     }
   }, [])
 
-  // 生成9個區域
-  function renderLi() {
-    return soduku.map((array, index) => {
-      return <li key={index}>{renderInput(array, index)}</li>
-    })
-  }
-
-  // 生成區域內的9個格子
-  function renderInput(array, area) {
-    return array.map((e, index) => {
-      return <Input key={`${area}-${index}`} color="secondary" type="number" onChange={setNum} inputProps={{ min: 1, max: 9, maxLength: 1, 'data-area': area, 'data-index': index }} value={e || ''} error={checkNumError(array, area, e, index)} />
-    })
-  }
-
   // 填入數字
   function setNum(event) {
     // console.log('set', event.target.dataset.area)
@@ -506,7 +492,19 @@ function App() {
         {
           isLoading
             ? <div className="loading_block"><CircularProgress color="secondary" /></div>
-            : <ul className="sd">{renderLi()}</ul>
+            : <ul className="sd">
+                {
+                soduku.map((area, areaindex) => 
+                      <li key={areaindex}>
+                        {
+                          area.map((item, itemIndex) => 
+                            <Input key={`${areaindex}-${itemIndex}`} color="secondary" type="number" onChange={setNum} inputProps={{ min: 1, max: 9, maxLength: 1, 'data-area': areaindex, 'data-index': itemIndex }} value={item || ''} error={checkNumError(area, areaindex, item, itemIndex)} />
+                          )
+                        }  
+                      </li>
+                  )
+                }
+              </ul>
         }
         <div className={classes.root}>
           <Button variant="contained" size="small" onClick={() => { reset() }}>
