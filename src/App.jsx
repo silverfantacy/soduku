@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import './assets/sass/App.scss';
 
 const blank_arr = [
@@ -28,11 +29,15 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const [soduku, setSuduku] = useState(blank_arr)
+  const [isLoading, setisLoading] = useState(true)
   // console.log('soduku', soduku)
 
   useEffect(() => {
     // 數獨Data發生改變時觸發
-    create()
+    // setisLoading(true)
+    console.log('useEffect')
+    // create()
+    setisLoading(false)
     return () => {
 
     }
@@ -61,7 +66,7 @@ function App() {
     let new_suduku = JSON.parse(JSON.stringify(soduku))
 
     if (event.target.value.length > 1) {
-      if (event.target.value[0] == 0) {
+      if (event.target.value[0] === 0) {
         event.target.value = event.target.value[1]
       } else {
         event.target.value = event.target.value[0]
@@ -217,6 +222,8 @@ function App() {
 
   // 創建數獨
   function create() {
+    
+    clean()
     let new_arr = JSON.parse(JSON.stringify(blank_arr))
 
     new_arr[0] = randomArr()
@@ -229,11 +236,13 @@ function App() {
   function loopArr(new_arr, this_area) {
     console.log('開始loop的區域=>', this_area)
     for (let iIndex = this_area; iIndex < new_arr.length; iIndex++) {
-      console.log(`====目前是第 ${iIndex} 區====`)
+      
       let i = new_arr[iIndex]
       if (iIndex === 0 || iIndex === 4 || iIndex === 8) {
+        continue
         // 排除固定區域
       } else {
+        console.log(`====目前是第 ${iIndex} 區====`)
         // 放入loop出來的數字
         new_arr = loopNum(i, iIndex, new_arr)
         // 寫入 new_arr
@@ -250,13 +259,13 @@ function App() {
     let colGroup_arr = colGroup(i, iIndex, new_arr)
     // console.log('目前列row有的數字',rowGroup(i, iIndex, new_arr))
     // console.log('目前行col有的數字',colGroup(i, iIndex, new_arr))
-    
+
     let calcArr = new_arr
-    console.log('calcArr', calcArr)
+    // console.log('calcArr', calcArr)
 
     // 循環填入9宮格
     for (let j = 0; j < 9; j++) {
-      console.log('calcArr[iIndex][j]', calcArr[iIndex][j])
+      // console.log('calcArr[iIndex][j]', calcArr[iIndex][j])
       if (calcArr[iIndex][j] === 0) {
         let used_num = [...(new Set([...rowGroup_arr[j], ...colGroup_arr[j], ...i]))]
         // console.log(`${iIndex}區域${j}位置已使用的數字集合`,used_num);
@@ -307,7 +316,7 @@ function App() {
 
         // 隨機取得一個數字
         let randomNub = (Math.floor(Math.random() * (use_num.length)));
-        console.log('randomNub', randomNub, use_num[randomNub])
+        // console.log('randomNub', randomNub, use_num[randomNub])
 
         // 通過驗證則寫入 calcArr
         if (!checkNumError(i, iIndex, use_num[randomNub], j, calcArr)) {
@@ -319,10 +328,9 @@ function App() {
           loopNum(i, iIndex, new_arr)
           break
         }
+        console.log('最後結果calcArr', calcArr);
       }
-      
     }
-    console.log('最後結果calcArr', calcArr);
 
     return calcArr
   }
@@ -355,6 +363,16 @@ function App() {
   }
 
   function reset() {
+    console.log('reset')
+    setSuduku(blank_arr)
+    // await create()
+    setisLoading(true)
+    create()
+    setisLoading(false)
+  }
+
+  function clean() {
+    console.log('clean')
     setSuduku(blank_arr)
   }
 
@@ -484,15 +502,17 @@ function App() {
   return (
     <div className="App">
       <main className="App-main">
-        <ul className="sd">
-          {renderLi()}
-        </ul>
-
+        {/* <div className="loading_block"><CircularProgress color="secondary" /></div> */}
+        {
+          isLoading
+            ? <div className="loading_block"><CircularProgress color="secondary" /></div>
+            : <ul className="sd">{renderLi()}</ul>
+        }
         <div className={classes.root}>
-          <Button variant="contained" size="small" onClick={() => { create() }}>
+          <Button variant="contained" size="small" onClick={() => { reset() }}>
             重新生產
           </Button>
-          <Button variant="contained" color="secondary" size="small" onClick={() => { reset() }}>
+          <Button variant="contained" color="secondary" size="small" onClick={() => { clean() }}>
             清空
           </Button>
         </div>

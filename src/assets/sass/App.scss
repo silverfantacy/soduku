@@ -47,6 +47,12 @@
   width: $size;
   height: $size;
 
+  @media screen and (max-width:500px) {
+    $size: 90%;
+    width: $size;
+    height: calc(90vw);
+  }
+
   li {
     width: 100%;
     border: 1px solid white;
@@ -56,10 +62,27 @@
     div {
       border: .5px dashed white;
     }
+
     input {
       color: white;
       text-align: center;
     }
   }
 
+}
+
+.loading_block {
+  $size: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: $size;
+  height: $size;
+
+  @media screen and (max-width:500px) {
+    $size: 90%;
+    width: $size;
+    height: calc(90vw);
+  }
 }
