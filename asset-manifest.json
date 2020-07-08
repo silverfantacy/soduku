@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/soduku/static/css/main.71592fe7.chunk.css",
-    "main.js": "/soduku/static/js/main.b46bff05.chunk.js",
-    "main.js.map": "/soduku/static/js/main.b46bff05.chunk.js.map",
+    "main.js": "/soduku/static/js/main.36ecd996.chunk.js",
+    "main.js.map": "/soduku/static/js/main.36ecd996.chunk.js.map",
     "runtime-main.js": "/soduku/static/js/runtime-main.7e1c61ab.js",
     "runtime-main.js.map": "/soduku/static/js/runtime-main.7e1c61ab.js.map",
     "static/js/2.cc418a33.chunk.js": "/soduku/static/js/2.cc418a33.chunk.js",
     "static/js/2.cc418a33.chunk.js.map": "/soduku/static/js/2.cc418a33.chunk.js.map",
     "index.html": "/soduku/index.html",
-    "precache-manifest.cae4cd9f144cae3d55d777764798bd0f.js": "/soduku/precache-manifest.cae4cd9f144cae3d55d777764798bd0f.js",
+    "precache-manifest.cab79cbce8f97c12feba0669824f23c5.js": "/soduku/precache-manifest.cab79cbce8f97c12feba0669824f23c5.js",
     "service-worker.js": "/soduku/service-worker.js",
     "static/css/main.71592fe7.chunk.css.map": "/soduku/static/css/main.71592fe7.chunk.css.map",
     "static/js/2.cc418a33.chunk.js.LICENSE.txt": "/soduku/static/js/2.cc418a33.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.7e1c61ab.js",
     "static/js/2.cc418a33.chunk.js",
     "static/css/main.71592fe7.chunk.css",
-    "static/js/main.b46bff05.chunk.js"
+    "static/js/main.36ecd996.chunk.js"
   ]
 }
