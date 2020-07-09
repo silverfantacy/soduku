@@ -242,6 +242,7 @@ function App() {
         // 寫入 new_arr
         // new_arr = temp_calcArr
         if (breaked) {
+          breaked = false
           break;
         }
 
@@ -255,6 +256,14 @@ function App() {
   function loopNum(i, iIndex, new_arr) {
     loopTimesN++
     console.log('重複了loopTimesN次=>', loopTimesN)
+
+    if (loopTimesN > 600) {
+      breaked = true
+      setSuduku(blank_arr)
+      loopTimesN = 0
+      alert('崩潰了！！！重新再試', loopTimesN)
+      return 
+    }
     // console.log('loopNum')
     let rowGroup_arr = rowGroup(i, iIndex, new_arr)
     let colGroup_arr = colGroup(i, iIndex, new_arr)
@@ -268,6 +277,7 @@ function App() {
     let j = 0
     while (j<9) {
       if (calcArr[iIndex][j] === 0) {
+        // console.log(`${iIndex}區域已使用的數字集合`, i);
         let used_num = [...(new Set([...rowGroup_arr[j], ...colGroup_arr[j], ...i]))]
         // console.log(`${iIndex}區域${j}位置已使用的數字集合`,used_num);
 
@@ -298,19 +308,8 @@ function App() {
         // 隨機取得一個數字
         let randomNub = (Math.floor(Math.random() * (use_num.length)));
         // console.log('randomNub', randomNub, use_num[randomNub])
-
-        // 通過驗證則寫入 calcArr
-        if (!checkNumError(i, iIndex, use_num[randomNub], j, calcArr)) {
-          // 通過驗證則寫入 calcArr
-          calcArr[iIndex][j] = use_num[randomNub]
-          // console.log('填入', calcArr[iIndex][j])
-          j++
-        } else {
-          // 驗證失敗 重新loopNum
-          loopNum(i, iIndex, new_arr)
-          break
-        }
-        // console.log('最後結果calcArr', calcArr);
+        calcArr[iIndex][j] = use_num[randomNub]
+        j++
       }
     }
 
