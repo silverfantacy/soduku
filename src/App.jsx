@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-var loopTimesArr = 0;
 var loopTimesN = 0;
 
 function App() {
@@ -224,14 +223,15 @@ function App() {
   }
 
   function loopArr(new_arr) {
-    loopTimesArr++
-    console.log('重複了loopArr次=>', loopTimesArr)
     // console.log('loopArr開始的區域=>', this_area)
 
     for (let iIndex = 0; iIndex < new_arr.length; iIndex++) {
       
       if (iIndex === 0 || iIndex === 4 || iIndex === 8) {
         console.log('continue=>', iIndex)
+        if(iIndex ===8) {
+          exclude(new_arr)
+        }
         continue
         // 排除固定區域
       } else {
@@ -334,6 +334,30 @@ function App() {
     // console.log('new_suduku',new_suduku)
 
     return new_suduku
+  }
+
+  function exclude(new_arr) {
+    // let randomNub = (Math.floor(Math.random() * 9) + 1);
+    // console.log('exclude', new_arr.flat(), 'randomNub=>', randomNub);
+
+    let exclude_arr = JSON.parse(JSON.stringify(new_arr.flat()))
+    let i = 0
+    while (i<50) {
+      let randomNub = (Math.floor(Math.random() * 81));
+      // console.log('randomNub=>', randomNub);
+      if (exclude_arr[randomNub] ===0 ){
+        continue
+      }
+      exclude_arr.splice(randomNub, 1, 0)
+      i++
+    }
+    let new_suduku = []
+    for (let index = 0; index < 9; index++) {
+      new_suduku.push(exclude_arr.slice(index*9, (index+1)*9 -1))
+    }
+    // console.log('exclude_arr', exclude_arr);
+    // console.log('new_suduku', new_suduku);
+    setSuduku(new_suduku)
   }
 
   function reset() {
@@ -486,7 +510,7 @@ function App() {
                       <li key={areaindex}>
                         {
                           area.map((item, itemIndex) => 
-                            <Input key={`${areaindex}-${itemIndex}`} color="secondary" type="number" onChange={setNum} inputProps={{ min: 1, max: 9, maxLength: 1, 'data-area': areaindex, 'data-index': itemIndex }} value={item || ''} error={checkNumError(area, areaindex, item, itemIndex)} />
+                            <Input key={`${areaindex}-${itemIndex}`} color="secondary" type="number" onChange={setNum} inputProps={{ min: 1, max: 9, maxLength: 1, 'data-area': areaindex, 'data-index': itemIndex }} value={item || ''} error={checkNumError(area, areaindex, item, itemIndex)}/>
                           )
                         }  
                       </li>
