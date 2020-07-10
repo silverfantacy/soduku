@@ -353,10 +353,10 @@ function App() {
     }
     let new_suduku = []
     for (let index = 0; index < 9; index++) {
-      new_suduku.push(exclude_arr.slice(index*9, (index+1)*9 -1))
+      new_suduku.push(exclude_arr.slice(index*9, (index+1)*9))
     }
-    // console.log('exclude_arr', exclude_arr);
-    // console.log('new_suduku', new_suduku);
+    console.log('exclude_arr', exclude_arr);
+    console.log('new_suduku', new_suduku);
     setSuduku(new_suduku)
   }
 
