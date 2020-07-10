@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-var breaked = false;
 var loopTimesArr = 0;
 var loopTimesN = 0;
 
@@ -220,100 +219,94 @@ function App() {
     new_arr[4] = randomArr()
     new_arr[8] = randomArr()
     setSuduku(new_arr)
-    loopArr(new_arr, 1)
+    loopArr(new_arr)
     setisLoading(false)
   }
 
-  function loopArr(new_arr, this_area) {
+  function loopArr(new_arr) {
     loopTimesArr++
     console.log('重複了loopArr次=>', loopTimesArr)
-    console.log('loopArr開始的區域=>', this_area)
-    for (let iIndex = this_area; iIndex < new_arr.length; iIndex++) {
+    // console.log('loopArr開始的區域=>', this_area)
+
+    for (let iIndex = 0; iIndex < new_arr.length; iIndex++) {
       
-      let i = new_arr[iIndex]
       if (iIndex === 0 || iIndex === 4 || iIndex === 8) {
+        console.log('continue=>', iIndex)
         continue
         // 排除固定區域
       } else {
         console.log(`====目前是第 ${iIndex} 區計算中====`)
-        // 放入loop出來的數字
-        new_arr = loopNum(i, iIndex, new_arr)
-        console.log(`====目前是第 ${iIndex} 區計算結束====`)
-        // 寫入 new_arr
-        // new_arr = temp_calcArr
-        if (breaked) {
-          breaked = false
-          break;
+        loopTimesN++
+        console.log('重複了loopTimesN次=>', loopTimesN)
+
+        // 防止計算時間過長
+        if (loopTimesN > 600) {
+          setSuduku(blank_arr)
+          loopTimesN = 0
+          // alert('計算錯誤！！！重新再試', loopTimesN)
+          // return
+          return create()
         }
+        // 防止計算時間過長
+
+        let rowGroup_arr = rowGroup(new_arr[iIndex], iIndex, new_arr)
+        let colGroup_arr = colGroup(new_arr[iIndex], iIndex, new_arr)
+        // console.log('目前列row有的數字',rowGroup(new_arr[iIndex], iIndex, new_arr))
+        // console.log('目前行col有的數字',colGroup(new_arr[iIndex], iIndex, new_arr))
+
+        // 循環填入9宮格
+        let j = 0
+        while (j < 9) {
+          if (new_arr[iIndex][j] === 0) {
+            // console.log(`${iIndex}區域已使用的數字集合`, i);
+            let used_num = [...(new Set([...rowGroup_arr[j], ...colGroup_arr[j], ...new_arr[iIndex]]))]
+            // console.log(`${iIndex}區域${j}位置已使用的數字集合`,used_num);
+
+            let use_num = JSON.parse(JSON.stringify(basic_data)).filter(e => {
+              return used_num.indexOf(e) === -1
+            })
+            // console.log(`${iIndex}-${j}位置可使用的數字集合`, use_num);
+
+            // 如果可以用的數字為0，則整組數字重填
+            if (use_num.length === 0) {
+              // 如果這個array無法填完數字，則loopArr上一個
+              let reset = iIndex - 1
+              
+              // 排除固定[0,4,8]區域
+              if (reset === 0) {
+                reset = 1
+              } else if (reset === 4) {
+                reset = 3
+              }
+              console.log(`${iIndex}-${j}位置無法填入，要重填=> ${reset}區`)
+              new_arr[reset] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+              new_arr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+              // 控制上層迴圈
+              iIndex = reset -1
+              
+              break
+            } else {
+              // 隨機取得一個數字
+              let randomNub = (Math.floor(Math.random() * (use_num.length)));
+              // console.log('randomNub', randomNub, use_num[randomNub])
+              new_arr[iIndex][j] = use_num[randomNub]
+              j++
+            }
+          }
+        }
+        console.log(`====目前是第 ${iIndex} 區計算結束====`)
+
+        // 放入loop出來的數字
+        // new_arr = loopNum(new_arr[iIndex], iIndex, new_arr)
+        // 寫入 new_arr
+        // new_arr = temp_new_arr
 
         // 正式寫入
         setSuduku(new_arr)
 
       }
     }
-  }
-
-  function loopNum(i, iIndex, new_arr) {
-    loopTimesN++
-    console.log('重複了loopTimesN次=>', loopTimesN)
-
-    if (loopTimesN > 600) {
-      breaked = true
-      setSuduku(blank_arr)
-      loopTimesN = 0
-      alert('崩潰了！！！重新再試', loopTimesN)
-      return 
-    }
-    // console.log('loopNum')
-    let rowGroup_arr = rowGroup(i, iIndex, new_arr)
-    let colGroup_arr = colGroup(i, iIndex, new_arr)
-    // console.log('目前列row有的數字',rowGroup(i, iIndex, new_arr))
-    // console.log('目前行col有的數字',colGroup(i, iIndex, new_arr))
-
-    let calcArr = new_arr
-    // console.log('calcArr', calcArr)
-
-    // 循環填入9宮格
-    let j = 0
-    while (j<9) {
-      if (calcArr[iIndex][j] === 0) {
-        // console.log(`${iIndex}區域已使用的數字集合`, i);
-        let used_num = [...(new Set([...rowGroup_arr[j], ...colGroup_arr[j], ...i]))]
-        // console.log(`${iIndex}區域${j}位置已使用的數字集合`,used_num);
-
-        let use_num = JSON.parse(JSON.stringify(basic_data)).filter(e => {
-          return used_num.indexOf(e) === -1
-        })
-        // console.log(`${iIndex}-${j}位置可使用的數字集合`, use_num);
-
-        // 如果可以用的數字為0，則整組數字重填
-        if (use_num.length === 0) {
-          // 
-          // 如果這個array無法填完數字，則loopArr上一個
-          let reset = iIndex - 1
-          console.log(`${iIndex}-${j}位置無法填入，要重填=> ${reset}區`)
-          // 排除固定[0,4,8]區域
-          if (reset === 0) {
-            reset = 1
-          } else if (reset === 4) {
-            reset = 3
-          }
-          calcArr[reset] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-          calcArr[iIndex] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-          loopArr(calcArr, reset)
-          breaked = true
-          break
-        }
-
-        // 隨機取得一個數字
-        let randomNub = (Math.floor(Math.random() * (use_num.length)));
-        // console.log('randomNub', randomNub, use_num[randomNub])
-        calcArr[iIndex][j] = use_num[randomNub]
-        j++
-      }
-    }
-
-    return calcArr
   }
 
   function randomArr() {
